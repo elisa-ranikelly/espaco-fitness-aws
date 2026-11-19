@@ -2,6 +2,7 @@ import * as cdk from 'aws-cdk-lib/core';
 import { Construct } from 'constructs';
 import { EspacoFitnessDatabase } from "./database";
 import { EspacoFitnessMicroservice } from './microservice';
+import { EspacoFitnessApiGateway } from './apigateway';
 
 export class InfraStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -10,8 +11,16 @@ export class InfraStack extends cdk.Stack {
     // CRIAÇÃO DO BANCO DE DADOS (DYNAMODB)
     const database = new EspacoFitnessDatabase(this, "DataBase");
 
-    new EspacoFitnessMicroservice (this, "Microservices", {
+    const microservices = new EspacoFitnessMicroservice(this, "Microservices", {
       productTable: database.productTable
+    });
+
+    /*new EspacoFitnessMicroservice (this, "Microservices", {
+      productTable: database.productTable
+    });*/
+
+    new EspacoFitnessApiGateway(this, "ApiGateway", {
+      productMicroservice: microservices.productMicroservice
     });
   }
 }
