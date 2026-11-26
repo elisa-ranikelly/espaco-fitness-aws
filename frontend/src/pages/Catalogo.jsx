@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import CardItem from "../componentes/CardItem";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { PRODUCT_API_URL } from "../config";
 
 function Catalogo(){
 
@@ -16,14 +17,17 @@ function Catalogo(){
     useEffect(() => {
         async function carregarProdutos() {
             try{
-                const response = await fetch(`${import.meta.env.BASE_URL}products.json`);
+                const response = await fetch(`${PRODUCT_API_URL}/product`);
+                if(!response.ok){
+                    throw new Error("Erro ao buscar produtos.");
+                }
                 const data = await response.json();
 
-                if(data.length === 0){
+                if(data.body.length === 0){
                     toast.info("Não há produtos noo catálogo!");
                 }
 
-                setProducts(data.produtos);
+                setProducts(data.body);
             
             }catch(error){
                 toast.error("Erro ao carregar os produtos!");

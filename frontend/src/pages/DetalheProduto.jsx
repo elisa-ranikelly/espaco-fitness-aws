@@ -6,11 +6,12 @@ import { FiShoppingCart  } from "react-icons/fi";
 import "../estilos/detalheProduto.css";
 import { useContext } from "react";
 import CarrinhoContext from "../context/CarrinhoContext";
+import { PRODUCT_API_URL } from "../config";
 
 function DetalheProduto(){
 
     const {id} = useParams();
-    const idNumerico = Number(id);
+
     const [produtoSelecionado, setProdutoSelecionado] = useState("");
     const [quantidade, setQuantidade] = useState(1);
     const [tamanhoSelecionado, setTamanhoSelecionado] = useState("");
@@ -20,22 +21,27 @@ function DetalheProduto(){
     useEffect(() => {
         async function carregarProduto() {
             try{
-                const response = await fetch(`${import.meta.env.BASE_URL}products.json`);
-                const data = await response.json();
-                const resul = data.produtos.find(product => product.id === idNumerico);
+                const response = await fetch(`${PRODUCT_API_URL}/product/${id}`);
 
-                if(!resul){
+                if(!response.ok){
+                    throw new Error("Erro ao buscar o produto");
+                }
+
+                const data = await response.json();
+                const resul = data.body
+
+                if(!resul || !resul.id){
                     toast.info("Nenhum produto encontrado!");
+                    return;
                 }
 
                 setProdutoSelecionado(resul);
             }catch(error){
-                toast.error("Erro ao carregar detalhes do produto!")
+                toast.error("Erro ao carregar detalhes do produto.")
             }
         }
-        carregarProduto();
-    //Array de dependencias -> vazio -> execute esse efeito quando o componente for montado.
-    }, [idNumerico]);
+        carregarProduto(); 
+    }, [id]);
 
     if(produtoSelecionado === ""){
         return <p className="msg-nao-encontrado">Carregando produto...</p>

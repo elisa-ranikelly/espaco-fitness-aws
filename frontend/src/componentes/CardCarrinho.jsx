@@ -3,6 +3,7 @@ import { FiTrash2  } from 'react-icons/fi';
 import { useContext, useEffect, useState } from "react";
 import CarrinhoContext from "../context/CarrinhoContext";
 import { toast } from "react-toastify";
+import { PRODUCT_API_URL } from "../config";
 
 function CardCarrinho({product}){
 
@@ -16,11 +17,15 @@ function CardCarrinho({product}){
         async function CarregarProduto() {
 
             try{
-                const response = await fetch(`${import.meta.env.BASE_URL}products.json`);
-                const data = await response.json();
-                const resultado = data.produtos.find(produto => produto.id === product.id);
+                const response = await fetch(`${PRODUCT_API_URL}/product/${product.id}`);
 
-                setProduto(resultado);
+                if(!response.ok){
+                    throw new Error("Erro ao buscar o produto.");
+                }
+
+                const data = await response.json();
+
+                setProduto(data.body);
             }catch(error){
                 toast.error("Erro ao carregar o produto!");
             }
