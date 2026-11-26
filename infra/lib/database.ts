@@ -21,7 +21,7 @@ export class EspacoFitnessDatabase extends Construct {
         return new Table(this, "product", {
             partitionKey: { name: "id", type: AttributeType.STRING },
             removalPolicy: RemovalPolicy.DESTROY, // DESTROY SERVE PARA APAGAR A TABELA
-            tableName: "product",
+            tableName: "espacofitness-product",
             billingMode: BillingMode.PAY_PER_REQUEST,
         });
     }
@@ -29,7 +29,7 @@ export class EspacoFitnessDatabase extends Construct {
     private createBasketTable(): ITable {
         return new Table(this, "basket", {
             partitionKey: { name: "userName", type: AttributeType.STRING },
-            tableName: "basket",
+            tableName: "espacofitness-basket",
             removalPolicy: RemovalPolicy.DESTROY,
             billingMode: BillingMode.PAY_PER_REQUEST,
         });
@@ -39,7 +39,7 @@ export class EspacoFitnessDatabase extends Construct {
         return new Table(this, "order", {
             partitionKey: { name: "userName", type: AttributeType.STRING },
             sortKey: { name: "orderDate", type: AttributeType.STRING },
-            tableName: "order",
+            tableName: "espacofitness-order",
             removalPolicy: RemovalPolicy.DESTROY,
             billingMode: BillingMode.PAY_PER_REQUEST,
         });
