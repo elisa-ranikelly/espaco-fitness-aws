@@ -2,7 +2,8 @@ import * as cdk from 'aws-cdk-lib/core';
 import { Construct } from 'constructs';
 import { EspacoFitnessDatabase } from "./database";
 import { EspacoFitnessMicroservice } from './microservice';
-import { EspacoFitnessApiGateway } from './apigateway';
+import { EspacoFitnessApiGateway } from "./apigateway";
+import { EspacoFitnessFrontend } from "./frontend";
 
 export class InfraStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -22,5 +23,7 @@ export class InfraStack extends cdk.Stack {
     new EspacoFitnessApiGateway(this, "ApiGateway", {
       productMicroservice: microservices.productMicroservice
     });
+
+    new EspacoFitnessFrontend(this, "Frontend");
   }
 }
